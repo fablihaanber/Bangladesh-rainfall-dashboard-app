@@ -1,0 +1,68 @@
+.leaflet-bar-timecontrol {
+  background-color: #1e1e1e !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-date,
+.leaflet-bar-timecontrol .timecontrol-play,
+.leaflet-bar-timecontrol .timecontrol-slider {
+  background-color: #1e1e1e !important;
+  color: #cecece !important;
+  border-color: #444 !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-play a {
+  background-color: #0082ff !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-play a:hover {
+  background-color: #0060cc !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-date {
+  color: #cecece !important;
+  font-size: 13px !important;
+}
+
+.leaflet-bar-timecontrol input[type="range"] {
+  accent-color: #0082ff !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-forward a,
+.leaflet-bar-timecontrol .timecontrol-backward a,
+.leaflet-bar-timecontrol .timecontrol-loop a {
+  background-color: #2a2a2a !important;
+  color: #cecece !important;
+  border-color: #444 !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-forward a:hover,
+.leaflet-bar-timecontrol .timecontrol-backward a:hover,
+.leaflet-bar-timecontrol .timecontrol-loop a:hover {
+  background-color: #0082ff !important;
+  color: white !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-speed a {
+  background-color: #2a2a2a !important;
+  color: #cecece !important;
+  border-color: #444 !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-speed a:hover {
+  background-color: #0082ff !important;
+  color: white !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-loop.active a {
+  background-color: #0082ff !important;
+  color: white !important;
+}
+
+.leaflet-bar a {
+  background-color: #2a2a2a !important;
+  color: #cecece !important;
+}

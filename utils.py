@@ -21,6 +21,10 @@ RAINFALL_CATEGORIES = {
     "Very heavy (65mm+)":   (65, float("inf")),
 }
 
+def load_map_css():
+    with open("styles.css", "r") as f:
+        return f"<style>{f.read()}</style>"
+    
 SHARED_CSS = """
 <style>
     .stApp { background-color: #141414; }
@@ -46,6 +50,21 @@ SHARED_CSS = """
     [data-testid="stSidebarNav"] [aria-selected="true"] {
         background-color: #0082ff !important;
         color: white !important;
+    }
+
+    /* Date input inline label */
+    [data-testid="stDateInput"] {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    [data-testid="stDateInput"] label {
+        white-space: nowrap;
+        min-width: fit-content;
+        margin-bottom: 0 !important;
+    }
+    [data-testid="stDateInput"] > div {
+        flex: 1;
     }
 
     /* Page header */
@@ -170,7 +189,7 @@ SHARED_CSS = """
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("bangladesh_district_rainfall.csv")
+    df = pd.read_csv("data/bangladesh_district_rainfall.csv")
     agg = df.groupby(["year", "month", "district"]).agg(
         mean_rainfall=("mean_rainfall",   "mean"),
         total_rainfall=("total_rainfall", "sum"),
@@ -181,7 +200,7 @@ def load_data():
 
 @st.cache_resource
 def load_geodata():
-    districts = gpd.read_file("bgd_admin_boundaries.shp/bgd_admin2.shp")
+    districts = gpd.read_file("data/bgd_admin_boundaries.shp/bgd_admin2.shp")
     districts = districts.to_crs("EPSG:4326")
     districts = districts[["adm2_name", "geometry"]].copy()
     districts["geometry"] = districts["geometry"].simplify(
@@ -230,19 +249,19 @@ def render_filter_form(form_key, df):
     init_filter_state(form_key)
     with st.form(key=form_key):
         st.markdown('<div class="filter-heading">Year</div>', unsafe_allow_html=True)
-        st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
+        # st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
         year_sel = st.radio(
             "Year", options=["Default"] + [str(y) for y in sorted(df["year"].unique())],
             horizontal=True, label_visibility="collapsed", key=f"{form_key}_year"
         )
         st.markdown('<div class="filter-heading">Month</div>', unsafe_allow_html=True)
-        st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
+        # st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
         month_sel = st.radio(
             "Month", options=["Default"] + list(MONTH_SHORT.values()),
             horizontal=True, label_visibility="collapsed", key=f"{form_key}_month"
         )
         st.markdown('<div class="filter-heading">Metric</div>', unsafe_allow_html=True)
-        st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
+        # st.markdown('<hr class="filter-underline">', unsafe_allow_html=True)
         metric_sel = st.radio(
             "Metric", options=list(METRIC_LABELS.keys()),
             format_func=lambda x: METRIC_LABELS[x],
@@ -261,7 +280,20 @@ def render_filter_form(form_key, df):
             st.session_state[f"{form_key}_applied_metric"] = metric_sel
             st.session_state[f"{form_key}_applied_rftype"] = rftype_sel
 
-
+def get_rainfall_type(val):
+    if val == 0:
+        return "No precipitation"
+    elif val <= 2.5:
+        return "Very light"
+    elif val <= 7.5:
+        return "Light"
+    elif val <= 35:
+        return "Moderate"
+    elif val <= 65:
+        return "Heavy"
+    else:
+        return "Very heavy"
+    
 def render_page_header(page_name):
     maps_cls     = "nav-btn active" if page_name == "Maps"     else "nav-btn"
     analysis_cls = "nav-btn active" if page_name == "Analysis" else "nav-btn"
@@ -304,3 +336,13 @@ def render_page_header(page_name):
 
     </div>
     """, unsafe_allow_html=True)
+
+MAP_ICON_SVG = """
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:12px;">
+    <polygon points="2,8 16,4 32,12 46,6 46,40 32,46 16,38 2,44" fill="none" stroke="#0082ff" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="16" y1="4" x2="16" y2="38" stroke="#0082ff" stroke-width="1.5"/>
+    <line x1="32" y1="12" x2="32" y2="46" stroke="#0082ff" stroke-width="1.5"/>
+    <circle cx="24" cy="22" r="4" fill="none" stroke="#0379a8" stroke-width="1.5"/>
+    <line x1="24" y1="26" x2="24" y2="34" stroke="#0379a8" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+"""
