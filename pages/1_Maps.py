@@ -219,7 +219,9 @@ with tab2:
             )
 
 def rainfall_data():
-  return pd.read_csv("data/bangladesh_district_rainfall.csv")
+  df = pd.read_csv("data/bangladesh_district_rainfall.csv")
+  df = df[df["year"]!=2026]
+  return df
 
 @st.cache_data
 def build_timelapse_features(from_date, to_date, metric_tl):

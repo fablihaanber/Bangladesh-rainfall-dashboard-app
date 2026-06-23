@@ -186,10 +186,15 @@ SHARED_CSS = """
 </style>
 """
 
+@st.cache_data
+def load_dataset():
+    df = pd.read_csv("data/bangladesh_district_rainfall.csv")
+    df = df[df["year"]!=2026]
+    return df
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/bangladesh_district_rainfall.csv")
+    df = load_dataset()
     agg = df.groupby(["year", "month", "district"]).agg(
         mean_rainfall=("mean_rainfall",   "mean"),
         total_rainfall=("total_rainfall", "sum"),
