@@ -28,9 +28,10 @@ BD Raindrop Dashboard provides district-level rainfall insights across Banglades
 
 ```
 rainfall-bangladesh-app/
-├── app.py                          ← Entry point, page routing
+├── Data Preprocessing.ipynb       ← How the dataset was processed
+├──app.py                          ← Entry point, page routing
 ├── utils.py                        ← Shared data loaders, CSS, helpers
-├── map_styles.css                  ← Folium map custom CSS
+├── styles.css                  ← Folium map custom CSS
 ├── requirements.txt                ← Python dependencies
 ├── .streamlit/
 │   └── config.toml                 ← Streamlit config (hot reload)
@@ -41,6 +42,7 @@ rainfall-bangladesh-app/
 │   └── bangladesh_district_rainfall.csv
 └── bgd_admin_boundaries.shp/
     └── bgd_admin2.shp              ← District-level shapefile
+    └── ...
 ```
 
 ---
@@ -51,7 +53,7 @@ rainfall-bangladesh-app/
 |---|---|
 | Source | CHIRPS (Climate Hazards Group InfraRed Precipitation with Station data) |
 | Coverage | Bangladesh — 64 districts |
-| Period | January 2020 — December 2025 |
+| Period | January 2020 — December 2025(The additional 1st jan, 2026 date is omitted) |
 | Frequency | Daily |
 | Columns | date, year, month, day, district, division, mean_rainfall, total_rainfall, max_rainfall, min_rainfall |
 
@@ -92,13 +94,6 @@ source venv/bin/activate     # Mac/Linux
 pip install -r requirements.txt
 ```
 
-> ⚠️ On Windows, if geopandas fails to install:
-> ```bash
-> pip install pipwin
-> pipwin install gdal
-> pipwin install fiona
-> pip install geopandas
-> ```
 
 **4. Add Stadia Maps API key**
 
@@ -106,6 +101,7 @@ Get a free API key from [stadiamaps.com](https://stadiamaps.com) and replace `YO
 ```python
 tiles="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=YOUR_KEY_HERE"
 ```
+(The app runs without the key)
 
 **5. Run the app**
 ```bash
@@ -129,7 +125,9 @@ streamlit run app.py
 
 ## 📸 Screenshots
 
-> Add screenshots here after deployment
+<img width="1003" height="582" alt="image" src="https://github.com/user-attachments/assets/6af806bc-d513-4343-8ebe-199e6030fac7" />
+<img width="1047" height="557" alt="image" src="https://github.com/user-attachments/assets/344d851a-3938-4b16-9aaa-a40e86844389" />
+
 
 ---
 
@@ -141,11 +139,11 @@ streamlit run app.py
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the Boost Software License.
 
 ---
 
 ## 🙋 Author
 
 Built by **Fabliha** as part of a data analyst portfolio project.  
-Data source: [CHIRPS](https://www.chc.ucsb.edu/data/chirps)
+Data source: [CHIRPS](https://climateserv.servirglobal.net/map)
