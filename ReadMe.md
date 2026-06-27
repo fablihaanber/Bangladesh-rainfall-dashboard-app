@@ -96,7 +96,7 @@ pip install -r requirements.txt
 > ```bash
 > pip install pipwin
 > pipwin install gdal
-> pipwin install fiona
+> pipwin install pyogrio
 > pip install geopandas
 > ```
 

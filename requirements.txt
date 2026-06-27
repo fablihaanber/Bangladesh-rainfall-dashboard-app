@@ -7,4 +7,4 @@ branca
 plotly
 shapely
 pyproj
-fiona
+pyogrio
