@@ -66,3 +66,7 @@
   background-color: #2a2a2a !important;
   color: #cecece !important;
 }
+
+[data-testid="stSidebarNav"] a span {
+  color: white !important;
+}

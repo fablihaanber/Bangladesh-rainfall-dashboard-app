@@ -24,7 +24,7 @@ st.markdown("""
 <style>
 .chart-title {
     color: #e6e6e6;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     margin: 18px 0 6px 0;
 }
@@ -34,11 +34,25 @@ st.markdown("""
 PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="#1a1a1a",
-    font_color="#cecece",
+    font_color="#ffffff",
     font_size=12,
     margin=dict(t=30, b=30, l=10, r=10),
-    xaxis=dict(gridcolor="#2e2e2e", linecolor="#3a3a3a"),
-    yaxis=dict(gridcolor="#2e2e2e", linecolor="#3a3a3a"),
+    xaxis=dict(
+        gridcolor="#2e2e2e",
+        linecolor="#3a3a3a",
+        tickfont=dict(color="#ffffff"),
+        title_font=dict(color="#ffffff"),
+    ),
+    yaxis=dict(
+        gridcolor="#2e2e2e",
+        linecolor="#3a3a3a",
+        tickfont=dict(color="#ffffff"),
+        title_font=dict(color="#ffffff"),
+    ),
+    legend=dict(
+        font=dict(color="#ffffff", size=13),
+        bgcolor="rgba(0,0,0,0)"
+    )
 )
 
 render_page_header("Analysis")
@@ -70,13 +84,19 @@ def classify_seasonal_rainfall(month):
 df["rainfall_season"] = df["month"].apply(classify_seasonal_rainfall)
 
 # ── Filter ────────────────────────────────────────────────────────
-selected_season = st.selectbox(
+selected_season = st.radio(
     "Season",
-    options=["pre_monsoon", "monsoon", "post_monsoon", "winter"],
-    format_func=lambda x: x.replace("_", " ").title()
+    options=["all", "pre_monsoon", "monsoon", "post_monsoon", "winter"],
+    format_func=lambda x: "All Seasons" if x == "all" else x.replace("_", " ").title(),
+    horizontal=True,
+    index=0  # default to All Seasons
 )
 
-dff = df[df["rainfall_season"] == selected_season]
+if selected_season == "all":
+    dff = df.copy()
+else:
+    dff = df[df["rainfall_season"] == selected_season]
+
 
 # ── Aggregations ──────────────────────────────────────────────────
 annual_mean_rainfall = (
@@ -91,37 +111,75 @@ annual_min["type"] = "Min Rainfall"
 annual_min = annual_min.rename(columns={"min_rainfall": "max_rainfall"})
 combined = pd.concat([annual_max, annual_min])
 
-# ── Chart 1: Annual Mean Rainfall ─────────────────────────────────
-st.markdown('<div class="chart-title">Annual Mean Rainfall (mm)</div>', unsafe_allow_html=True)
 
-fig1 = px.bar(
-    annual_mean_rainfall, x="year", y="total_rainfall",
-    labels={"year": "Year", "total_rainfall": "Mean Rainfall Totals (mm)"},
-    color_discrete_sequence=["#0082ff"],
-)
-fig1.update_layout(**PLOTLY_LAYOUT)
-fig1.update_layout(
-    height=400,
-    yaxis=dict(range=[0, annual_mean_rainfall["total_rainfall"].max() * 1.5])
-)
-fig1.update_traces(marker_line_width=0)
-st.plotly_chart(fig1, use_container_width=True)
+col1, col2 = st.columns(2)
 
-# ── Chart 2: Max vs Min Rainfall ──────────────────────────────────
-st.markdown('<div class="chart-title">Max vs Min Rainfall (mm)</div>', unsafe_allow_html=True)
+with col1:
+    st.markdown('<div class="chart-title">Annual Mean Rainfall (mm)</div>', unsafe_allow_html=True)
+    fig1 = px.bar(
+        annual_mean_rainfall, x="year", y="total_rainfall",
+        labels={"year": "Year", "total_rainfall": "Mean Rainfall Totals (mm)"},
+        color_discrete_sequence=["#0082ff"],
+    )
+    fig1.update_layout(**PLOTLY_LAYOUT)
+    fig1.update_layout(
+        height=400,
+        yaxis=dict(range=[0, annual_mean_rainfall["total_rainfall"].max() * 1.5 if not annual_mean_rainfall.empty else 100])
+    )
+    fig1.update_traces(marker_line_width=0)
+    st.plotly_chart(fig1, use_container_width=True)
 
-fig2 = px.line(
-    combined, x="year", y="max_rainfall", color="type",
-    markers=True,
-    labels={"year": "Year", "max_rainfall": "Rainfall (mm)", "type": "Type"},
-    color_discrete_sequence=["#0082ff", "#ff6b6b"],
-)
-fig2.update_layout(**PLOTLY_LAYOUT)
-fig2.update_layout(
-    height=400,
-    yaxis=dict(range=[0, combined["max_rainfall"].max() * 2])
-)
-st.plotly_chart(fig2, use_container_width=True)
+with col2:
+    st.markdown('<div class="chart-title">Max vs Min Rainfall (mm)</div>', unsafe_allow_html=True)
+    fig2 = px.line(
+        combined, x="year", y="max_rainfall", color="type",
+        markers=True,
+        labels={"year": "Year", "max_rainfall": "Rainfall (mm)", "type": "Type"},
+        color_discrete_sequence=["#0082ff", "#ff6b6b"],
+    )
+    fig2.update_layout(**PLOTLY_LAYOUT)
+    fig2.update_layout(
+        height=400,
+        yaxis=dict(range=[0, combined["max_rainfall"].max() * 2])
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+
+# # ── Chart 1: Annual Mean Rainfall ─────────────────────────────────
+# st.markdown('<div class="chart-title">Annual Mean Rainfall (mm)</div>', unsafe_allow_html=True)
+
+# fig1 = px.bar(
+#     annual_mean_rainfall, x="year", y="total_rainfall",
+#     labels={"year": "Year", "total_rainfall": "Mean Rainfall Totals (mm)"},
+#     color_discrete_sequence=["#0082ff"],
+# )
+# fig1.update_layout(**PLOTLY_LAYOUT)
+# fig1.update_layout(
+#     height=400,
+#     yaxis=dict(range=[0, annual_mean_rainfall["total_rainfall"].max() * 1.5])
+# )
+# fig1.update_traces(marker_line_width=0)
+# st.plotly_chart(fig1, use_container_width=True)
+
+# # ── Chart 2: Max vs Min Rainfall ──────────────────────────────────
+# st.markdown('<div class="chart-title">Max vs Min Rainfall (mm)</div>', unsafe_allow_html=True)
+
+# fig2 = px.line(
+#     combined, x="year", y="max_rainfall", color="type",
+#     markers=True,
+#     labels={"year": "Year", "max_rainfall": "Rainfall (mm)", "type": "Type"},
+#     color_discrete_sequence=["#0082ff", "#ff6b6b"],
+# )
+# fig2.update_layout(**PLOTLY_LAYOUT)
+# fig2.update_layout(
+#     height=400,
+#     yaxis=dict(range=[0, combined["max_rainfall"].max() * 2]),
+#     legend=dict(
+#         font=dict(color="#ffffff", size=13),
+#         bgcolor="rgba(0,0,0,0)"
+#     )
+# )
+# st.plotly_chart(fig2, use_container_width=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 st.caption("Source: CHIRPS 2020–2025")

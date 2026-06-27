@@ -38,7 +38,7 @@ SHARED_CSS = """
 
     /* Sidebar nav links */
     [data-testid="stSidebarNav"] a {
-        color: #cecece !important;
+        color: white !important;
         font-weight: 500;
         border-radius: 6px;
         padding: 6px 12px;
