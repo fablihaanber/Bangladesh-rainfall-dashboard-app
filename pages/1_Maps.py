@@ -135,17 +135,12 @@ with tab2:
     ]
 
     m2 = folium.Map(
-    location=[23.7, 90.4],
-    zoom_start=7,
-    min_zoom=7,
-    max_zoom=10,
-    tiles=None
+    location=[23.7, 90.4], 
+    zoom_start=7, 
+    tiles="CartoDB dark_matter", 
+    min_zoom = 7, 
+    max_zoom = 10
     )
-    folium.TileLayer(
-          tiles="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=YOUR_KEY_HERE",
-          attr="Stadia Maps © Stamen Design © OpenStreetMap contributors",
-          name="Stamen Terrain",
-      ).add_to(m2)
     
     # merge rainfall values into geojson for tooltip
     tooltip_geojson = json.loads(json.dumps(geojson_data))
