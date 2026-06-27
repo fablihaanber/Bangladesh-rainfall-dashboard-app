@@ -102,13 +102,6 @@ pip install -r requirements.txt
 > pip install geopandas
 > ```
 
-**4. Add Stadia Maps API key**
-
-Get a free API key from [stadiamaps.com](https://stadiamaps.com) and replace `YOUR_KEY_HERE` in `pages/1_Maps.py`:
-```python
-tiles="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=YOUR_KEY_HERE"
-```
-(The app runs without the key)
 
 **5. Run the app**
 ```bash
