@@ -84,9 +84,9 @@ cd rainfall-bangladesh-app
 
 **2. Create a virtual environment**
 ```bash
-python -m venv venv
-venv\Scripts\activate        # Windows
-source venv/bin/activate     # Mac/Linux
+python -m venv bd-rainfall-app
+bd-rainfall-app\Scripts\activate        # Windows
+source bd-rainfall-app/bin/activate     # Mac/Linux
 ```
 
 **3. Install dependencies**
@@ -113,6 +113,10 @@ tiles="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_
 **5. Run the app**
 ```bash
 streamlit run app.py
+```
+If you want to reload automatically after changes to code
+```bash
+streamlit run app.py --server.runOnSave=true
 ```
 
 ---
