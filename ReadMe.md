@@ -94,7 +94,6 @@ source venv/bin/activate     # Mac/Linux
 pip install -r requirements.txt
 ```
 
-<<<<<<< HEAD
 > ⚠️ On Windows, if geopandas fails to install:
 > ```bash
 > pip install pipwin
@@ -102,8 +101,6 @@ pip install -r requirements.txt
 > pipwin install pyogrio
 > pip install geopandas
 > ```
-=======
->>>>>>> ab14c3708a866364ec0b09f6284a817b28e89a69
 
 **4. Add Stadia Maps API key**
 
